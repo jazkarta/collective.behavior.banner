@@ -102,7 +102,6 @@ class BannerViewlet(ViewletBase):
         settings = registry.forInterface(IBannerSettingsSchema)
         types = settings.types
         context = aq_inner(self.context)
-        import pdb;pdb.set_trace()
         # first handle the obj itself
         if ISlider.providedBy(context):
             if context.banner_hide:
