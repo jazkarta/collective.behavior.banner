@@ -10,6 +10,7 @@ from plone.app.layout.navigation.interfaces import INavigationRoot
 from plone.app.layout.viewlets import ViewletBase
 from plone.registry.interfaces import IRegistry
 from urlparse import urlparse
+from zope.cachedescriptors.property import Lazy as lazy_property
 from zope.component import getUtility
 
 import random
@@ -29,7 +30,8 @@ class BannerViewlet(ViewletBase):
     def index(self):
         context = aq_inner(self.context)
         if ISlider.providedBy(context):
-            if context.slider_relation and len(context.slider_relation) > 1:
+            sliders = self.random_banner
+            if sliders and len(sliders) > 1:
                 return self.slider_template()
         return self.banner_template()
 
@@ -94,13 +96,43 @@ class BannerViewlet(ViewletBase):
             banner['banner_url'] = obj.banner_url
         return banner
 
+    @lazy_property
     def random_banner(self):
+        registry = getUtility(IRegistry)
+        settings = registry.forInterface(IBannerSettingsSchema)
+        types = settings.types
         context = aq_inner(self.context)
+        import pdb;pdb.set_trace()
+        # first handle the obj itself
+        if ISlider.providedBy(context):
+            if context.banner_hide:
+                return False
+            slider = context.slider_relation
+            if not slider and context.banner_stop_inheriting:
+                return False
+            # if all the fields are empty and inheriting is not stopped
+        if context.portal_type not in types:
+            return False
+        if not slider:
+            context = context.__parent__
+            # we walk up the path
+            for item in context.aq_chain:
+                if ISlider.providedBy(item):
+                    # we have a banner. check.
+                    if item.banner_stop_inheriting:
+                        return False
+                    slider = item.slider_relation
+                    if slider:
+                        break
+                if INavigationRoot.providedBy(item):
+                    return False
+                if item.portal_type not in types:
+                    return False
         banners = []
-        raw_banners = context.slider_relation
+        raw_banners = slider
         for banner in raw_banners:
-            banner = banner.to_object
-            banners.append(self.banner(banner))
+            if banner.to_object:
+                banners.append(banner.to_object)
 
         self.scroll = len(banners) > 1
 
