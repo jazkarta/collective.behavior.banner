@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 from collective.behavior.banner import _
 from plone.app.textfield import RichText
+from plone.app.vocabularies.catalog import CatalogSource
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.dexterity.interfaces import IDexterityContent
 from plone.indexer.decorator import indexer
 from plone.namedfile import field as namedfile
 from plone.supermodel import model
 from z3c.relationfield.schema import RelationChoice
+from z3c.relationfield.schema import RelationList
 from zope import schema
 from zope.component import adapts
 from zope.interface import alsoProvides
@@ -29,6 +31,7 @@ class IBanner(model.Schema):
             'banner_link',
             'banner_linktext',
             'banner_fontcolor',
+            'banner_header_image',
         ]
     )
 
@@ -47,9 +50,10 @@ class IBanner(model.Schema):
         required=False,
     )
 
-    banner_image = namedfile.NamedBlobImage(
+    banner_image = RelationChoice(
         title=_(u"Banner Image"),
-        description=u"",
+        description=_(u""),
+        source=CatalogSource(portal_type='Image'),
         required=False,
     )
 
@@ -97,6 +101,14 @@ class IBanner(model.Schema):
     banner_fontcolor = schema.TextLine(
         title=_(u"Fontcolor on the teaser"),
         description=_(u'Color for headings and texts as webcolor'),
+        required=False,
+    )
+
+    banner_header_image = RelationChoice(
+        title=_(u"Header Background Image"),
+        description=_(u"This is the full-bleed background image you see behind"
+                      " the main navigation menu, logo, etc at the top."),
+        source=CatalogSource(portal_type='Image'),
         required=False,
     )
 

@@ -4,6 +4,8 @@
 
 <div id="portal-banner" class="principal portal-banner" role="complementary"
      tal:define="has_image python:banner and 'banner_image' in banner;
+                 image python:banner and has_image and banner['banner_image'] or nothing;
+                 is_image python:has_image and hasattr(image, 'portal_type') and image.portal_type == 'Image';
                  has_url python:banner and 'banner_url' in banner;
                  has_fontcolor python:banner and 'banner_fontcolor' in banner;
                  fontcolor python:has_fontcolor and banner['banner_fontcolor'] + ' !important' or '#4d4d4d'">
@@ -17,7 +19,11 @@
                 <div class="bannerImage"
                      tal:condition="python:has_image">
                         <img class="bannerImageImage"
-                             tal:attributes="src string:${banner/banner_image}/preview">
+                             tal:condition="is_image"
+                             tal:attributes="src string:${image/absolute_url}/@@images/image">
+                        <img class="bannerImageImage"
+                             tal:condition="not:is_image"
+                             tal:attributes="src string:${context/absolute_url}/@@images/banner_image/preview">
                 </div>
 
                 <div class="bannerVideo"
@@ -31,8 +37,15 @@
 
                     <h1 class="bannerTitle"
                          tal:attributes="style string:color:${fontcolor}"
-                         tal:condition="python:'banner_title' in banner">
+                         tal:condition="python:'banner_title' in banner and is_image">
                         <span tal:replace="banner/banner_title">Title</span>
+                    </h1>
+
+                    <h1 class="bannerTitle"
+                         tal:attributes="style string:color:${fontcolor}"
+                         tal:condition="python: not is_image and not has_url">
+                        <span tal:omit-tag="python:True">Please replace this banner with a real Image.
+                        </span>
                     </h1>
 
                     <p class="bannerDescription"

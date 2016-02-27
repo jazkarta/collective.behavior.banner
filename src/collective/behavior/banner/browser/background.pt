@@ -1,0 +1,10 @@
+<tal:block
+    tal:define="background view/find_background|nothing"
+    i18n:domain="collective.behavior.banner">
+
+    <div class="bg-stretch add"
+         tal:condition="background">
+      <img src="${background/absolute_url}/@@images/image" alt="image description" width="612" height="202">
+    </div>
+
+</tal:block>

@@ -73,9 +73,15 @@ class BannerViewlet(ViewletBase):
     def banner(self, obj):
         """ return banner of this object """
         banner = {}
-        if getattr(obj, 'banner_image', False):
-            banner['banner_image'] = '%s/@@images/banner_image' \
-                % obj.absolute_url()
+        image = getattr(obj, 'banner_image', False)
+        if image:
+            if hasattr(image, 'to_object'):
+                to_obj = image.to_object
+                if to_obj:
+                    banner['banner_image'] = to_obj
+            else:
+                banner['banner_image'] = '%s/@@images/banner_image' \
+                    % obj.absolute_url()
         if obj.banner_title:
             banner['banner_title'] = obj.banner_title
         if obj.banner_description:
@@ -180,3 +186,50 @@ class BannerViewlet(ViewletBase):
         # Each template will use the argument it cares about and ignore the
         # other.
         return template.format(path, videoId)
+
+
+class BackgroundViewlet(ViewletBase):
+    """ A viewlet which renders the background """
+
+    def render(self):
+        if '@@edit' in self.request.steps:
+            return ''
+        return self.index()
+
+    def find_background(self):
+        registry = getUtility(IRegistry)
+        settings = registry.forInterface(IBannerSettingsSchema)
+        types = settings.types
+        context = aq_inner(self.context)
+        # first handle the obj itself
+        if IBanner.providedBy(context):
+            background = self.background(context)
+            if background:
+                return background
+            # if all the fields are empty and inheriting is not stopped
+        if context.portal_type not in types:
+            return False
+        context = context.__parent__
+
+        # we walk up the path
+        for item in context.aq_chain:
+            if IBanner.providedBy(item):
+                # we have a banner. check.
+                background = self.background(item)
+                if background:
+                    return background
+            if INavigationRoot.providedBy(item):
+                return False
+            if item.portal_type not in types:
+                return False
+
+        return False
+
+    def background(self, obj):
+        """ return background of this object """
+        image = getattr(obj, 'banner_header_image', False)
+        if image:
+            if hasattr(image, 'to_object'):
+                to_obj = image.to_object
+                if to_obj:
+                    return to_obj
