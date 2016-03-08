@@ -13,6 +13,7 @@
     <browser:viewlet
       name="collective.bannerviewlet"
       for="plone.dexterity.interfaces.IDexterityContent"
+      view="plone.app.layout.globals.interfaces.IViewView"
       manager="plone.app.layout.viewlets.interfaces.IAboveContent"
       class=".viewlets.BannerViewlet"
       layer="..interfaces.ICollectiveBannerLayer"
@@ -22,6 +23,7 @@
     <browser:viewlet
       name="collective.headerbgviewlet"
       for="plone.dexterity.interfaces.IDexterityContent"
+      view="plone.app.layout.globals.interfaces.IViewView"
       manager="plone.app.layout.viewlets.interfaces.IAboveContent"
       class=".viewlets.BackgroundViewlet"
       template="background.pt"
