@@ -37,7 +37,7 @@
 
                     <h1 class="bannerTitle"
                          tal:attributes="style string:color:${fontcolor}"
-                         tal:condition="python:'banner_title' in banner and is_image">
+                         tal:condition="python:'banner_title' in banner and (is_image or has_url)">
                         <span tal:replace="banner/banner_title">Title</span>
                     </h1>
 
