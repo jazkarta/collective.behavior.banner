@@ -176,6 +176,9 @@ class BannerViewlet(ViewletBase):
         videoId = parsed.query.replace('v=', '')
         if 'youtube' in parsed.netloc:
             template = YOUTUBE_TEMPLATE
+        elif 'youtu.be' in parsed.netloc:
+            videoId = path
+            template = YOUTUBE_TEMPLATE
         elif 'vimeo' in parsed.netloc:
             template = VIMEO_TEMPLATE
         else:
