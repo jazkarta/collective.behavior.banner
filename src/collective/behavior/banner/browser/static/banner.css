@@ -10,3 +10,15 @@
     height:auto;
     display:block;
 }
+
+# These do not belong here.  But I could not figure out how to make them 
+# be loaded by dlt/customizations....all.css, and I know that this css
+# file does get loaded when editing a page.
+.pattern-relateditems-tree .tree-container .pat-tree > ul.jqtree-tree {
+  padding-right: 10px;
+}
+
+.pattern-relateditems-tree .tree-container .jqtree-tree .jqtree_common {
+  position: relative;
+}
+
