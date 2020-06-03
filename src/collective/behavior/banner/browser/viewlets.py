@@ -9,7 +9,7 @@ from collective.behavior.banner.slider import ISlider
 from plone.app.layout.navigation.interfaces import INavigationRoot
 from plone.app.layout.viewlets import ViewletBase
 from plone.registry.interfaces import IRegistry
-from urlparse import urlparse
+from six.moves.urllib.parse import urlparse
 from zope.cachedescriptors.property import Lazy as lazy_property
 from zope.component import getUtility
 

@@ -6,9 +6,9 @@ from plone.dexterity.interfaces import IDexterityContent
 from plone.supermodel import model
 from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.schema import RelationList
-from zope.component import adapts
+from zope.component import adapter
 from zope.interface import alsoProvides
-from zope.interface import implements
+from zope.interface import implementer
 
 
 class ISlider(model.Schema):
@@ -35,9 +35,9 @@ class ISlider(model.Schema):
 alsoProvides(ISlider, IFormFieldProvider)
 
 
+@implementer(ISlider)
+@adapter(IDexterityContent)
 class Slider(object):
-    implements(ISlider)
-    adapts(IDexterityContent)
 
     def __init__(self, context):
         self.context = context
