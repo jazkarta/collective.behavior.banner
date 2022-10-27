@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 from collective.behavior.banner import _
+from plone.app.multilingual.browser.interfaces import make_relation_root_path
 from plone.app.vocabularies.catalog import CatalogSource
+from plone.app.z3cform.widget import RelatedItemsFieldWidget
+from plone.autoform import directives
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.dexterity.interfaces import IDexterityContent
 from plone.supermodel import model
@@ -26,10 +29,18 @@ class ISlider(model.Schema):
         description=_(u"These banners will be used in the slider"),
         default=[],
         value_type=RelationChoice(
-            title=_(u'Target'),
-            source=CatalogSource(portal_type='Image')
+            vocabulary='plone.app.vocabularies.Catalog',
         ),
         required=False,
+    )
+    directives.widget(
+        'slider_relation',
+        RelatedItemsFieldWidget,
+        vocabulary='plone.app.vocabularies.Catalog',
+        pattern_options={
+            'selectableTypes': ['Image'],
+            'basePath': make_relation_root_path,
+        }
     )
 
 alsoProvides(ISlider, IFormFieldProvider)

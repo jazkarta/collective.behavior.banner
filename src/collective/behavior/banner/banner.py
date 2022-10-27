@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 from collective.behavior.banner import _
+from plone.app.multilingual.browser.interfaces import make_relation_root_path
 from plone.app.textfield import RichText
 from plone.app.vocabularies.catalog import CatalogSource
+from plone.app.z3cform.widget import RelatedItemsFieldWidget
+from plone.autoform import directives
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.dexterity.interfaces import IDexterityContent
 from plone.indexer.decorator import indexer
@@ -50,11 +53,26 @@ class IBanner(model.Schema):
         required=False,
     )
 
+    #banner_image = RelationChoice(
+    #    title=_(u"Banner Image"),
+    #    description=_(u""),
+    #    source=CatalogSource(portal_type='Image'),
+    #    required=False,
+    #)
+
     banner_image = RelationChoice(
         title=_(u"Banner Image"),
         description=_(u""),
-        source=CatalogSource(portal_type='Image'),
+        vocabulary='plone.app.vocabularies.Catalog',
         required=False,
+    )
+    directives.widget(
+        'banner_image',
+        RelatedItemsFieldWidget,
+        pattern_options={
+            'selectableTypes': ['Image'],
+            'basePath': make_relation_root_path,
+        },
     )
 
     banner_url = schema.URI(
@@ -108,8 +126,16 @@ class IBanner(model.Schema):
         title=_(u"Header Background Image"),
         description=_(u"This is the full-bleed background image you see behind"
                       " the main navigation menu, logo, etc at the top."),
-        source=CatalogSource(portal_type='Image'),
+        vocabulary='plone.app.vocabularies.Catalog',
         required=False,
+    )
+    directives.widget(
+        'banner_header_image',
+        RelatedItemsFieldWidget,
+        pattern_options={
+            'selectableTypes': ['Image'],
+            'basePath': make_relation_root_path,
+        },
     )
 
 
