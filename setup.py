@@ -3,17 +3,19 @@
 from setuptools import find_packages
 from setuptools import setup
 
-
-long_description = (
-    open('README.rst').read() +
-    '\n' +
-    'Contributors\n' +
-    '============\n' +
-    '\n' +
-    open('CONTRIBUTORS.rst').read() +
-    '\n' +
-    open('CHANGES.rst').read() +
-    '\n')
+try:
+    long_description = (
+        open('README.rst').read() +
+        '\n' +
+        'Contributors\n' +
+        '============\n' +
+        '\n' +
+        open('CONTRIBUTORS.rst').read() +
+        '\n' +
+        open('CHANGES.rst').read() +
+        '\n')
+except:
+    long_description = ""
 
 setup(
     name='collective.behavior.banner',
