@@ -150,7 +150,7 @@ class BannerViewlet(ViewletBase):
         YOUTUBE_TEMPLATE = '''
             <iframe
                 width="660"
-                height="495"
+                height="550"
                 src="//www.youtube-nocookie.com/embed/{1}?showinfo=0"
                 frameborder="0"
                 allowfullscreen>
@@ -161,7 +161,7 @@ class BannerViewlet(ViewletBase):
             <iframe
                 src="//player.vimeo.com/video/{0}?title=0&amp;byline=0&amp;portrait=0"
                 width="660"
-                height="371"
+                height="550"
                 frameborder="0"
                 webkitallowfullscreen
                 mozallowfullscreen
